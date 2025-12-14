@@ -1,0 +1,123 @@
+.tab-bar {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  height: 40px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.tab-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tab-bar::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+.tab-bar::-webkit-scrollbar-thumb {
+  background: #ced4da;
+  border-radius: 2px;
+}
+
+.tab-bar::-webkit-scrollbar-thumb:hover {
+  background: #adb5bd;
+}
+
+.tabs-container {
+  display: flex;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  min-width: 120px;
+  max-width: 200px;
+  background: #e9ecef;
+  border-right: 1px solid #dee2e6;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  position: relative;
+}
+
+.tab-item:hover {
+  background: #dee2e6;
+}
+
+.tab-item.active {
+  background: #ffffff;
+  border-bottom: 2px solid #4a90e2;
+  font-weight: 500;
+}
+
+.tab-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  color: #495057;
+}
+
+.tab-item.active .tab-name {
+  color: #2c3e50;
+}
+
+.tab-close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.tab-item:hover .tab-close-button {
+  opacity: 1;
+}
+
+.tab-close-button:hover {
+  background: #ced4da;
+  color: #dc3545;
+}
+
+.tab-close-button:active {
+  background: #adb5bd;
+}
+
+.new-tab-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid #dee2e6;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.new-tab-button:hover {
+  background: #dee2e6;
+  color: #495057;
+}
+
+.new-tab-button:active {
+  background: #ced4da;
+}
+
