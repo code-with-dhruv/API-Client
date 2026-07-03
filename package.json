@@ -1,5 +1,5 @@
 {
-  "name": "timepass-api-client",
+  "name": "burp_ai-api-client",
   "version": "1.0.0",
   "description": "A desktop API client like Postman and Insomnia",
   "main": "dist-electron/main.js",

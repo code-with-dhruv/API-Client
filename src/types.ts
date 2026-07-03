@@ -14,6 +14,27 @@ export interface QueryParam {
   enabled: boolean
 }
 
+export interface FormDataField {
+  id: string
+  key: string
+  value: string
+  enabled: boolean
+}
+
+export type AuthType = 'none' | 'bearer' | 'basic' | 'apiKey'
+
+export interface AuthConfig {
+  type: AuthType
+  token?: string
+  username?: string
+  password?: string
+  apiKeyName?: string
+  apiKeyValue?: string
+  apiKeyLocation?: 'header' | 'query'
+}
+
+export const DEFAULT_AUTH: AuthConfig = { type: 'none' }
+
 export interface Request {
   id: string
   name: string
@@ -23,6 +44,14 @@ export interface Request {
   queryParams: QueryParam[]
   body: string
   bodyType: 'json' | 'text' | 'form-data' | 'x-www-form-urlencoded'
+  formData?: FormDataField[]
+  auth?: AuthConfig
+}
+
+export interface Environment {
+  id: string
+  name: string
+  variables: { id: string; key: string; value: string; enabled: boolean }[]
 }
 
 export interface Response {

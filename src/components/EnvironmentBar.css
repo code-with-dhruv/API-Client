@@ -1,0 +1,168 @@
+.environment-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.environment-bar-icon {
+  color: #6c757d;
+}
+
+.environment-select {
+  padding: 6px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 500;
+  background: #ffffff;
+  color: #2c3e50;
+  max-width: 220px;
+  cursor: pointer;
+}
+
+.environment-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.environment-manage-button {
+  background: transparent;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.15s ease;
+}
+
+.environment-manage-button:hover {
+  background: #ffffff;
+  border-color: #adb5bd;
+  color: #2c3e50;
+}
+
+.environment-hint {
+  font-size: 11px;
+  color: #adb5bd;
+}
+
+.environment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.environment-modal {
+  background: #ffffff;
+  border-radius: 0;
+  width: 90%;
+  max-width: 560px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.environment-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.environment-modal-header h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.environment-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  display: flex;
+}
+
+.environment-modal-body {
+  padding: 16px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.environment-empty {
+  color: #6c757d;
+  font-size: 13px;
+  padding: 16px 0;
+  line-height: 1.6;
+}
+
+.environment-empty code {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  padding: 1px 5px;
+  font-family: 'Fira Code', monospace;
+}
+
+.environment-editor {
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.environment-editor-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.environment-name-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.environment-name-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.environment-variables {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.environment-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.environment-save-button {
+  width: auto;
+  padding: 10px 20px;
+  margin-top: 0;
+  border-radius: 0;
+}

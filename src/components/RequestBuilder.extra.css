@@ -1,0 +1,97 @@
+.request-name-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.curl-copy-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  background: transparent;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.curl-copy-button:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  color: #2c3e50;
+}
+
+.auth-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-type-select {
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  color: #2c3e50;
+  font-size: 13px;
+  font-weight: 500;
+  max-width: 220px;
+  cursor: pointer;
+}
+
+.auth-type-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.auth-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 400px;
+}
+
+.auth-field-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.auth-field-input {
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  color: #2c3e50;
+  font-size: 12px;
+  font-family: 'Fira Code', monospace;
+  transition: all 0.15s ease;
+}
+
+.auth-field-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.json-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #dc3545;
+  background: #fdecea;
+  border: 1px solid #f5c6cb;
+  padding: 8px 12px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.form-data-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

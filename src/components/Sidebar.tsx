@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { History, Folder, Plus, Clock, ChevronDown, ChevronRight, X } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { History, Folder, Plus, Clock, ChevronDown, ChevronRight, X, Trash2, Pencil, Search, Check } from 'lucide-react'
 import { Request, HistoryItem, Collection } from '../types'
 import './Sidebar.css'
+import './Sidebar.extra.css'
 
 interface SidebarProps {
   history: HistoryItem[]
@@ -10,21 +11,34 @@ interface SidebarProps {
   onCreateCollection: (name: string) => Promise<void>
   onAddRequestToCollection: (collectionId: string, request: Request) => Promise<void>
   currentRequest: Request | null
+  onDeleteHistoryItem?: (historyItemId: string) => void
+  onClearHistory?: () => void
+  onDeleteCollection?: (collectionId: string) => void
+  onDeleteRequestFromCollection?: (requestId: string) => void
+  onRenameCollection?: (collectionId: string, name: string) => void
 }
 
-export default function Sidebar({ 
-  history, 
-  collections, 
+export default function Sidebar({
+  history,
+  collections,
   onSelectRequest,
   onCreateCollection,
   onAddRequestToCollection,
-  currentRequest
+  currentRequest,
+  onDeleteHistoryItem,
+  onClearHistory,
+  onDeleteCollection,
+  onDeleteRequestFromCollection,
+  onRenameCollection,
 }: SidebarProps) {
   const [activeTab, setActiveTab] = useState<'history' | 'collections'>('history')
   const [showNewCollectionInput, setShowNewCollectionInput] = useState(false)
   const [newCollectionName, setNewCollectionName] = useState('')
   const [expandedCollections, setExpandedCollections] = useState<Set<string>>(new Set())
   const [showAddToCollectionMenu, setShowAddToCollectionMenu] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [renamingCollectionId, setRenamingCollectionId] = useState<string | null>(null)
+  const [renameValue, setRenameValue] = useState('')
 
   const handleCreateCollection = async () => {
     if (newCollectionName.trim()) {
@@ -53,6 +67,65 @@ export default function Sidebar({
     }
   }
 
+  const startRename = (collection: Collection, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setRenamingCollectionId(collection.id)
+    setRenameValue(collection.name)
+  }
+
+  const commitRename = (collectionId: string) => {
+    if (renameValue.trim() && onRenameCollection) {
+      onRenameCollection(collectionId, renameValue.trim())
+    }
+    setRenamingCollectionId(null)
+  }
+
+  const handleDeleteHistoryItem = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation()
+    onDeleteHistoryItem?.(id)
+  }
+
+  const handleClearHistory = () => {
+    if (window.confirm('Clear all request history? This cannot be undone.')) {
+      onClearHistory?.()
+    }
+  }
+
+  const handleDeleteCollection = (e: React.MouseEvent, id: string, name: string) => {
+    e.stopPropagation()
+    if (window.confirm(`Delete collection "${name}"? This also removes its saved requests.`)) {
+      onDeleteCollection?.(id)
+    }
+  }
+
+  const handleDeleteRequestFromCollection = (e: React.MouseEvent, requestId: string) => {
+    e.stopPropagation()
+    onDeleteRequestFromCollection?.(requestId)
+  }
+
+  const filteredHistory = useMemo(() => {
+    if (!searchQuery.trim()) return history
+    const q = searchQuery.toLowerCase()
+    return history.filter(item =>
+      item.request.url.toLowerCase().includes(q) ||
+      item.request.name?.toLowerCase().includes(q) ||
+      item.request.method.toLowerCase().includes(q)
+    )
+  }, [history, searchQuery])
+
+  const filteredCollections = useMemo(() => {
+    if (!searchQuery.trim()) return collections
+    const q = searchQuery.toLowerCase()
+    return collections
+      .map(collection => ({
+        ...collection,
+        requests: collection.requests.filter(
+          req => req.url.toLowerCase().includes(q) || req.name?.toLowerCase().includes(q)
+        ),
+      }))
+      .filter(collection => collection.name.toLowerCase().includes(q) || collection.requests.length > 0)
+  }, [collections, searchQuery])
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -72,16 +145,38 @@ export default function Sidebar({
         </button>
       </div>
 
+      <div className="sidebar-search">
+        <Search size={14} className="sidebar-search-icon" />
+        <input
+          type="text"
+          placeholder={activeTab === 'history' ? 'Search history...' : 'Search collections...'}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="sidebar-search-input"
+        />
+        {searchQuery && (
+          <button className="sidebar-search-clear" onClick={() => setSearchQuery('')}>
+            <X size={12} />
+          </button>
+        )}
+      </div>
+
       <div className="sidebar-content">
         {activeTab === 'history' ? (
           <div className="history-list">
-            {history.length === 0 ? (
+            {history.length > 0 && (
+              <button className="clear-history-button" onClick={handleClearHistory}>
+                <Trash2 size={12} />
+                Clear all history
+              </button>
+            )}
+            {filteredHistory.length === 0 ? (
               <div className="empty-state">
                 <History size={48} />
-                <p>No request history</p>
+                <p>{searchQuery ? 'No matching history' : 'No request history'}</p>
               </div>
             ) : (
-              history.map((item) => (
+              filteredHistory.map((item) => (
                 <div
                   key={item.id}
                   className="history-item"
@@ -96,6 +191,13 @@ export default function Sidebar({
                       {item.response.status} • {item.response.time}ms
                     </div>
                   </div>
+                  <button
+                    className="item-delete-button"
+                    onClick={(e) => handleDeleteHistoryItem(e, item.id)}
+                    title="Delete from history"
+                  >
+                    <Trash2 size={13} />
+                  </button>
                 </div>
               ))
             )}
@@ -147,14 +249,15 @@ export default function Sidebar({
                 New Collection
               </button>
             )}
-            {collections.length === 0 ? (
+            {filteredCollections.length === 0 ? (
               <div className="empty-state">
                 <Folder size={48} />
-                <p>No collections</p>
+                <p>{searchQuery ? 'No matching collections' : 'No collections'}</p>
               </div>
             ) : (
-              collections.map((collection) => {
-                const isExpanded = expandedCollections.has(collection.id)
+              filteredCollections.map((collection) => {
+                const isExpanded = expandedCollections.has(collection.id) || !!searchQuery
+                const isRenaming = renamingCollectionId === collection.id
                 return (
                   <div key={collection.id} className="collection-wrapper">
                     <div
@@ -166,8 +269,41 @@ export default function Sidebar({
                       ) : (
                         <ChevronRight size={14} className="collection-chevron" />
                       )}
-                      <span className="collection-name">{collection.name}</span>
+                      {isRenaming ? (
+                        <input
+                          type="text"
+                          className="collection-rename-input"
+                          value={renameValue}
+                          autoFocus
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') commitRename(collection.id)
+                            if (e.key === 'Escape') setRenamingCollectionId(null)
+                          }}
+                          onBlur={() => commitRename(collection.id)}
+                        />
+                      ) : (
+                        <span className="collection-name">{collection.name}</span>
+                      )}
                       <span className="collection-count">({collection.requests.length})</span>
+                      {isRenaming ? (
+                        <button
+                          className="add-to-collection-button"
+                          onClick={(e) => { e.stopPropagation(); commitRename(collection.id) }}
+                          title="Save name"
+                        >
+                          <Check size={12} />
+                        </button>
+                      ) : (
+                        <button
+                          className="add-to-collection-button"
+                          onClick={(e) => startRename(collection, e)}
+                          title="Rename collection"
+                        >
+                          <Pencil size={12} />
+                        </button>
+                      )}
                       {currentRequest && (
                         <button
                           className="add-to-collection-button"
@@ -182,6 +318,13 @@ export default function Sidebar({
                           <Plus size={12} />
                         </button>
                       )}
+                      <button
+                        className="add-to-collection-button collection-delete-button"
+                        onClick={(e) => handleDeleteCollection(e, collection.id, collection.name)}
+                        title="Delete collection"
+                      >
+                        <Trash2 size={12} />
+                      </button>
                     </div>
                     {isExpanded && (
                       <div className="collection-requests">
@@ -204,6 +347,13 @@ export default function Sidebar({
                                   {request.name || request.url || 'Untitled'}
                                 </div>
                               </div>
+                              <button
+                                className="item-delete-button"
+                                onClick={(e) => handleDeleteRequestFromCollection(e, request.id)}
+                                title="Remove from collection"
+                              >
+                                <Trash2 size={13} />
+                              </button>
                             </div>
                           ))
                         )}
@@ -240,4 +390,3 @@ export default function Sidebar({
     </div>
   )
 }
-

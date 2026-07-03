@@ -188,6 +188,29 @@
   color: #495057;
 }
 
+.response-preview-frame,
+.response-preview-image {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  border: none;
+  display: block;
+  object-fit: contain;
+}
+
+.response-preview-frame {
+  flex: 1;
+}
+
+.preview-unavailable {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+}
+
 .headers-list {
   display: flex;
   flex-direction: column;

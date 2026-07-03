@@ -1,0 +1,25 @@
+.response-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+  padding-right: 4px;
+}
+
+.response-action-button {
+  background: transparent;
+  border: 1px solid #ced4da;
+  border-radius: 0;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.15s ease;
+}
+
+.response-action-button:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  color: #2c3e50;
+}
